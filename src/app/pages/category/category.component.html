@@ -1,0 +1,88 @@
+<app-header></app-header>
+<div class="flex justify-center items-center m-5">
+  <form
+    class="flex gap-1"
+    action=""
+    #categoryForm="ngForm"
+    (ngSubmit)="onSubmit(categoryForm)"
+  >
+    <div>
+      <input
+        type="text"
+        name="category"
+        #newCategory="ngModel"
+        [(ngModel)]="categoryField"
+        (ngModelChange)="handleChange()"
+        required
+        class="w-[400px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Enter category"
+      />
+      <div class="text-sm text-red-600" *ngIf="submitted">
+        Category field is required
+      </div>
+    </div>
+    <app-button
+      class="bg-blue-600 rounded-lg hover:bg-blue-700 h-[42px]"
+      text="Add"
+    ></app-button>
+  </form>
+</div>
+<div class="flex justify-center items-center m-5">
+  <div class="relative overflow-x-auto">
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-3 w-[80px]">No</th>
+          <th scope="col" class="px-6 py-3 w-[280px]">Category</th>
+          <th scope="col" class="px-6 py-3 w-[280px]">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          (document:click)="onDocumentClick($event)"
+          [ngClass]="{ outside: isEdit && idCategory === categoryItem.id }"
+          *ngFor="let categoryItem of listCategory; let i = index"
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+        >
+          <td class="px-6 py-4 w-[80px]">{{ i + 1 }}</td>
+          <ng-container
+            *ngIf="isEdit && idCategory === categoryItem.id; else displayData"
+          >
+            <td class="px-6 py-4 w-[280px]">
+              <input
+                type="text"
+                [(ngModel)]="categoryItem.category"
+                (ngModelChange)="handleChangeEdit(categoryItem.category)"
+                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              />
+            </td>
+          </ng-container>
+          <ng-template #displayData>
+            <td class="px-6 py-4 w-[280px]">{{ categoryItem?.category }}</td>
+          </ng-template>
+
+          <td class="px-6 py-4 w-[280px] flex gap-4 items-center">
+            <app-button
+              (onClickEdit)="onEditItem(categoryItem.id)"
+              (onClickSave)="onSaveItem(categoryItem.id)"
+              class="bg-amber-400 rounded-lg hover:bg-amber-500"
+              text="Edit"
+              [isEdit]="isEdit"
+              [idCategory]="idCategory === categoryItem.id"
+            ></app-button>
+            <app-button
+              class="bg-red-500 rounded-lg hover:bg-red-600"
+              text="Remove"
+              (onClick)="onDeleteItem(categoryItem.id)"
+            ></app-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,7 @@
+<app-header></app-header>
+<div class="flex justify-center">
+  <div class="h-[80vh] w-[800px] m-6 flex flex-wrap justify-center gap-5">
+    <app-card *ngFor="let card of dataDashboard" [dataCard]="card"></app-card>
+  </div>
+</div>
+<app-footer></app-footer>
